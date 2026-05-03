@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -52,91 +50,165 @@ const RegisterPage = () => {
     };
 
     return (
-        <div style={{ background: 'var(--slate)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-            <Navbar />
-            <main style={{ flex: 1, padding: '8rem 2rem', display: 'flex', justifyContent: 'center' }}>
-                <div style={{ maxWidth: '600px', width: '100%', background: 'var(--deep)', border: '1px solid rgba(139,190,178,0.2)', padding: '3rem', borderRadius: '20px', boxShadow: '0 20px 50px rgba(0,0,0,0.3)' }}>
-                    <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.5rem', color: 'var(--lime)', marginBottom: '0.5rem' }}>Create <span style={{ color: 'var(--teal)', fontStyle: 'italic' }}>Account</span></h2>
-                    <p style={{ color: 'rgba(230,249,175,0.7)', marginBottom: '2rem' }}>Join the Atlas community at DJSCE.</p>
+        <div style={{ 
+            fontFamily: "'DM Sans', sans-serif", 
+            background: 'var(--deep)', 
+            color: 'var(--lime)', 
+            minHeight: '100vh', 
+            display: 'grid', 
+            gridTemplateColumns: 'minmax(400px, 1fr) 1.2fr' 
+        }}>
+            {/* LEFT HERO PANEL */}
+            <div className="hero-panel" style={{ 
+                background: 'var(--slate)', 
+                position: 'relative', 
+                overflow: 'hidden', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                justifyContent: 'space-between', 
+                padding: '2.5rem 3.5rem' 
+            }}>
+                <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(139, 190, 178, 0.07) 1.5px, transparent 1.5px)', backgroundSize: '28px 28px', pointerEvents: 'none' }}></div>
+                <div style={{ position: 'absolute', top: '-10%', right: '-10%', width: '500px', height: '500px', background: 'radial-gradient(ellipse, rgba(56, 78, 119, 0.7) 0%, transparent 60%)', pointerEvents: 'none' }}></div>
+                <div style={{ position: 'absolute', bottom: '-15%', left: '-5%', width: '400px', height: '400px', background: 'radial-gradient(ellipse, rgba(139, 190, 178, 0.1) 0%, transparent 65%)', pointerEvents: 'none' }}></div>
 
-                    {error && <div style={{ background: 'rgba(255,100,100,0.1)', border: '1px solid red', color: '#ff8888', padding: '1rem', borderRadius: '10px', marginBottom: '1.5rem' }}>{error}</div>}
+                <div style={{ position: 'relative', zIndex: 2 }}>
+                    <Link to="/" style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.6rem', fontWeight: 900, fontStyle: 'italic', color: 'var(--lime)', textDecoration: 'none', letterSpacing: '-0.02em' }}>
+                        Atlas
+                    </Link>
+                </div>
 
-                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-                        <div>
-                            <label style={{ display: 'block', color: 'var(--teal)', marginBottom: '0.5rem', fontSize: '0.8rem', textTransform: 'uppercase' }}>Full Name</label>
-                            <input type="text" name="name" value={formData.name} onChange={handleChange} required
-                                style={{ width: '100%', padding: '0.8rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(139,190,178,0.2)', borderRadius: '10px', color: 'white' }} />
+                <div style={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(2rem, 3.5vw, 3rem)', fontWeight: 900, lineHeight: 1.1, color: 'var(--lime)', marginBottom: '1.2rem' }}>
+                        Join the<br/>community at<br/><em style={{ fontStyle: 'italic', color: 'var(--teal)' }}>DJSCE.</em>
+                    </div>
+                    <p style={{ fontSize: '0.92rem', fontWeight: 300, color: 'rgba(139, 190, 178, 0.6)', lineHeight: 1.7, maxWidth: '380px', marginBottom: '2.5rem' }}>
+                        Create an account to report lost items and help others find their belongings. 
+                    </p>
+                    
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem', background: 'rgba(13, 06, 48, 0.4)', border: '1px solid rgba(139, 190, 178, 0.14)', borderRadius: '12px', padding: '0.7rem 1rem', backdropFilter: 'blur(4px)' }}>
+                            <span style={{ fontSize: '1.4rem' }}>💼</span>
+                            <div style={{ fontSize: '0.78rem', color: 'rgba(230, 249, 175, 0.7)' }}><strong style={{ color: 'var(--lime)', display: 'block', fontWeight: 500 }}>Blue Canvas Tote</strong>Reported · Cafeteria</div>
+                            <span style={{ marginLeft: 'auto', fontSize: '0.62rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '0.18rem 0.6rem', borderRadius: '100px', background: 'rgba(230, 249, 175, 0.1)', color: 'var(--lime)', border: '1px solid rgba(230, 249, 175, 0.18)' }}>Lost</span>
                         </div>
-
-                        <div style={{ display: 'flex', gap: '1rem' }}>
-                            <div style={{ flex: 1 }}>
-                                <label style={{ display: 'block', color: 'var(--teal)', marginBottom: '0.5rem', fontSize: '0.8rem', textTransform: 'uppercase' }}>Email</label>
-                                <input type="email" name="email" value={formData.email} onChange={handleChange} required
-                                    style={{ width: '100%', padding: '0.8rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(139,190,178,0.2)', borderRadius: '10px', color: 'white' }} />
-                            </div>
-                            <div style={{ flex: 1 }}>
-                                <label style={{ display: 'block', color: 'var(--teal)', marginBottom: '0.5rem', fontSize: '0.8rem', textTransform: 'uppercase' }}>Password</label>
-                                <input type="password" name="password" value={formData.password} onChange={handleChange} required
-                                    style={{ width: '100%', padding: '0.8rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(139,190,178,0.2)', borderRadius: '10px', color: 'white' }} />
-                            </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem', background: 'rgba(13, 06, 48, 0.4)', border: '1px solid rgba(139, 190, 178, 0.14)', borderRadius: '12px', padding: '0.7rem 1rem', backdropFilter: 'blur(4px)' }}>
+                            <span style={{ fontSize: '1.4rem' }}>📱</span>
+                            <div style={{ fontSize: '0.78rem', color: 'rgba(230, 249, 175, 0.7)' }}><strong style={{ color: 'var(--lime)', display: 'block', fontWeight: 500 }}>iPhone 13 (Blue)</strong>Found · 4th Floor Lab</div>
+                            <span style={{ marginLeft: 'auto', fontSize: '0.62rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', padding: '0.18rem 0.6rem', borderRadius: '100px', background: 'rgba(139, 190, 178, 0.15)', color: 'var(--teal)', border: '1px solid rgba(139, 190, 178, 0.22)' }}>Found</span>
                         </div>
+                    </div>
+                </div>
 
-                        <div style={{ display: 'flex', gap: '1rem' }}>
-                            <div style={{ flex: 1 }}>
-                                <label style={{ display: 'block', color: 'var(--teal)', marginBottom: '0.5rem', fontSize: '0.8rem', textTransform: 'uppercase' }}>Year</label>
-                                <select name="year" value={formData.year} onChange={handleChange}
-                                    style={{ width: '100%', padding: '0.8rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(139,190,178,0.2)', borderRadius: '10px', color: 'white' }}>
-                                    <option value="FE">First Year (FE)</option>
-                                    <option value="SE">Second Year (SE)</option>
-                                    <option value="TE">Third Year (TE)</option>
-                                    <option value="BE">Fourth Year (BE)</option>
-                                </select>
+                <div style={{ position: 'relative', zIndex: 2 }}>
+                    <div style={{ display: 'flex', gap: '2rem' }}>
+                        <div className="hs-item">
+                            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: 'var(--teal)' }}>12k+</div>
+                            <div style={{ fontSize: '0.68rem', color: 'rgba(139, 190, 178, 0.4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>DJSCE Students</div>
+                        </div>
+                        <div className="hs-item">
+                            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 900, color: 'var(--teal)' }}>350+</div>
+                            <div style={{ fontSize: '0.68rem', color: 'rgba(139, 190, 178, 0.4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Daily Active Users</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* RIGHT FORM PANEL */}
+            <div style={{ background: 'var(--navy)', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '3rem 3.5rem', overflowY: 'auto' }}>
+                <div style={{ maxWidth: '480px', width: '100%', margin: '0 auto' }}>
+                    
+                    <div style={{ display: 'flex', background: 'rgba(13, 06, 48, 0.4)', border: '1px solid rgba(139, 190, 178, 0.12)', borderRadius: '100px', padding: '4px', marginBottom: '2rem', gap: '4px' }}>
+                        <Link to="/login" style={{ flex: 1, padding: '0.55rem', borderRadius: '100px', border: 'none', background: 'transparent', color: 'rgba(139, 190, 178, 0.5)', fontWeight: 500, cursor: 'pointer', textDecoration: 'none', textAlign: 'center', fontSize: '0.88rem' }}>Sign In</Link>
+                        <button style={{ flex: 1, padding: '0.55rem', borderRadius: '100px', border: 'none', background: 'var(--lime)', color: 'var(--deep)', fontWeight: 500, cursor: 'pointer' }}>Create Account</button>
+                    </div>
+
+                    <div className="auth-form active">
+                        <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.6rem', fontWeight: 700, color: 'var(--lime)', marginBottom: '0.4rem' }}>
+                            Join <em style={{ fontStyle: 'italic', color: 'var(--teal)' }}>Atlas.</em>
+                        </div>
+                        <p style={{ fontSize: '0.85rem', fontWeight: 300, color: 'rgba(139, 190, 178, 0.5)', marginBottom: '1.5rem', lineHeight: 1.5 }}>
+                            Create your account to start reporting items at DJSCE.
+                        </p>
+
+                        {error && <div style={{ background: 'rgba(255,100,100,0.1)', border: '1px solid red', color: '#ff8888', padding: '0.8rem', borderRadius: '10px', marginBottom: '1.5rem', fontSize: '0.85rem' }}>{error}</div>}
+
+                        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <div className="form-group">
+                                <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(139, 190, 178, 0.45)', marginBottom: '0.35rem' }}>Full Name</label>
+                                <input className="form-input" type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Arjun Mehta"
+                                    style={{ width: '100%', background: 'rgba(13, 06, 48, 0.5)', border: '1px solid rgba(139, 190, 178, 0.18)', borderRadius: '12px', padding: '0.75rem 1rem', color: 'var(--lime)', outline: 'none' }} />
                             </div>
-                            <div style={{ flex: 1 }}>
-                                <label style={{ display: 'block', color: 'var(--teal)', marginBottom: '0.5rem', fontSize: '0.8rem', textTransform: 'uppercase' }}>Branch</label>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <div className="form-group">
+                                    <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(139, 190, 178, 0.45)', marginBottom: '0.35rem' }}>Email</label>
+                                    <input className="form-input" type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="name@email.com"
+                                        style={{ width: '100%', background: 'rgba(13, 06, 48, 0.5)', border: '1px solid rgba(139, 190, 178, 0.18)', borderRadius: '12px', padding: '0.75rem 1rem', color: 'var(--lime)', outline: 'none' }} />
+                                </div>
+                                <div className="form-group">
+                                    <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(139, 190, 178, 0.45)', marginBottom: '0.35rem' }}>Password</label>
+                                    <input className="form-input" type="password" name="password" value={formData.password} onChange={handleChange} required placeholder="••••••••"
+                                        style={{ width: '100%', background: 'rgba(13, 06, 48, 0.5)', border: '1px solid rgba(139, 190, 178, 0.18)', borderRadius: '12px', padding: '0.75rem 1rem', color: 'var(--lime)', outline: 'none' }} />
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <div className="form-group">
+                                    <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(139, 190, 178, 0.45)', marginBottom: '0.35rem' }}>Year</label>
+                                    <select name="year" value={formData.year} onChange={handleChange}
+                                        style={{ width: '100%', background: 'rgba(13, 06, 48, 0.5)', border: '1px solid rgba(139, 190, 178, 0.18)', borderRadius: '12px', padding: '0.75rem 1rem', color: 'var(--lime)', outline: 'none' }}>
+                                        <option value="FE">FE</option>
+                                        <option value="SE">SE</option>
+                                        <option value="TE">TE</option>
+                                        <option value="BE">BE</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(139, 190, 178, 0.45)', marginBottom: '0.35rem' }}>Division</label>
+                                    <input className="form-input" type="text" name="division" value={formData.division} onChange={handleChange} required placeholder="e.g. A"
+                                        style={{ width: '100%', background: 'rgba(13, 06, 48, 0.5)', border: '1px solid rgba(139, 190, 178, 0.18)', borderRadius: '12px', padding: '0.75rem 1rem', color: 'var(--lime)', outline: 'none' }} />
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(139, 190, 178, 0.45)', marginBottom: '0.35rem' }}>Branch</label>
                                 <select name="branch" value={formData.branch} onChange={handleChange}
-                                    style={{ width: '100%', padding: '0.8rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(139,190,178,0.2)', borderRadius: '10px', color: 'white' }}>
+                                    style={{ width: '100%', background: 'rgba(13, 06, 48, 0.5)', border: '1px solid rgba(139, 190, 178, 0.18)', borderRadius: '12px', padding: '0.75rem 1rem', color: 'var(--lime)', outline: 'none' }}>
                                     <option value="Computer Engineering">Computer Engineering</option>
                                     <option value="IT">IT</option>
                                     <option value="EXTC">EXTC</option>
                                     <option value="Mechanical">Mechanical</option>
                                     <option value="Data Science">Data Science</option>
-                                    <option value="AI \u0026 ML">AI \u0026 ML</option>
+                                    <option value="AI & ML">AI & ML</option>
                                 </select>
                             </div>
-                        </div>
 
-                        <div style={{ display: 'flex', gap: '1rem' }}>
-                            <div style={{ flex: 1 }}>
-                                <label style={{ display: 'block', color: 'var(--teal)', marginBottom: '0.5rem', fontSize: '0.8rem', textTransform: 'uppercase' }}>Division</label>
-                                <input type="text" name="division" value={formData.division} onChange={handleChange} required placeholder="e.g. A"
-                                    style={{ width: '100%', padding: '0.8rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(139,190,178,0.2)', borderRadius: '10px', color: 'white' }} />
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <div className="form-group">
+                                    <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(139, 190, 178, 0.45)', marginBottom: '0.35rem' }}>SAP ID</label>
+                                    <input className="form-input" type="text" name="sapid" value={formData.sapid} onChange={handleChange} required placeholder="6000XXXXXXXX"
+                                        style={{ width: '100%', background: 'rgba(13, 06, 48, 0.5)', border: '1px solid rgba(139, 190, 178, 0.18)', borderRadius: '12px', padding: '0.75rem 1rem', color: 'var(--lime)', outline: 'none' }} />
+                                </div>
+                                <div className="form-group">
+                                    <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(139, 190, 178, 0.45)', marginBottom: '0.35rem' }}>Roll No</label>
+                                    <input className="form-input" type="text" name="rollno" value={formData.rollno} onChange={handleChange} required placeholder="e.g. 45"
+                                        style={{ width: '100%', background: 'rgba(13, 06, 48, 0.5)', border: '1px solid rgba(139, 190, 178, 0.18)', borderRadius: '12px', padding: '0.75rem 1rem', color: 'var(--lime)', outline: 'none' }} />
+                                </div>
                             </div>
-                            <div style={{ flex: 1 }}>
-                                <label style={{ display: 'block', color: 'var(--teal)', marginBottom: '0.5rem', fontSize: '0.8rem', textTransform: 'uppercase' }}>Roll No</label>
-                                <input type="text" name="rollno" value={formData.rollno} onChange={handleChange} required
-                                    style={{ width: '100%', padding: '0.8rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(139,190,178,0.2)', borderRadius: '10px', color: 'white' }} />
+
+                            <button type="submit" disabled={loading} className="btn-submit"
+                                style={{ width: '100%', background: 'var(--lime)', color: 'var(--deep)', padding: '0.9rem', border: 'none', borderRadius: '100px', fontSize: '1rem', fontWeight: 500, cursor: 'pointer', marginTop: '0.5rem' }}>
+                                {loading ? 'Creating Account...' : 'Create Account →'}
+                            </button>
+
+                            <div style={{ fontSize: '0.74rem', color: 'rgba(139, 190, 178, 0.3)', textAlign: 'center', marginTop: '1rem', lineHeight: 1.6 }}>
+                                By signing up, you agree to our <a href="#" style={{ color: 'inherit' }}>Terms of Use</a> and <a href="#" style={{ color: 'inherit' }}>Privacy Policy</a>.
                             </div>
-                        </div>
-
-                        <div>
-                            <label style={{ display: 'block', color: 'var(--teal)', marginBottom: '0.5rem', fontSize: '0.8rem', textTransform: 'uppercase' }}>SAP ID</label>
-                            <input type="text" name="sapid" value={formData.sapid} onChange={handleChange} required placeholder="600012100XX"
-                                style={{ width: '100%', padding: '0.8rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(139,190,178,0.2)', borderRadius: '10px', color: 'white' }} />
-                        </div>
-
-                        <button type="submit" disabled={loading}
-                            style={{ background: 'var(--lime)', color: 'var(--deep)', padding: '1rem', borderRadius: '100px', fontSize: '1rem', fontWeight: 'bold', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', marginTop: '1rem' }}>
-                            {loading ? 'Creating Account...' : 'Register Now'}
-                        </button>
-
-                        <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>
-                            Already have an account? <Link to="/login" style={{ color: 'var(--teal)', textDecoration: 'none' }}>Login here</Link>
-                        </p>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-            </main>
-            <Footer />
+            </div>
         </div>
     );
 };
