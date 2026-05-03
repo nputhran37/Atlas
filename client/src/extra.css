@@ -1,0 +1,292 @@
+/* ── EXTRA.HTML STYLES ADAPTED TO TEAL/LIME PALETTE ── */
+
+/* HERO 3D WRAPPER */
+#hero-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Below the hero text (z-index 2) */
+    pointer-events: none; /* Let clicks pass through to buttons */
+}
+.hero {
+    position: relative; /* Ensure the canvas is contained */
+}
+
+/* REVEAL ANIMATION CLASSES */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.sec-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--teal);
+    margin-bottom: 1rem;
+    letter-spacing: -0.03em;
+}
+.sec-title span {
+    color: var(--lime);
+    font-style: italic;
+}
+
+/* HOW IT WORKS FLIP CARDS */
+.how-section {
+    padding: 8rem 3rem;
+    background: var(--deep);
+    position: relative;
+}
+.how-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
+    margin-top: 4rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.flip-card {
+    background: transparent;
+    height: 320px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+.flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+.flip-card:hover .flip-inner {
+    transform: rotateY(180deg);
+}
+.flip-front, .flip-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.flip-front {
+    background: rgba(24, 49, 79, 0.4);
+    border: 1px solid rgba(139, 190, 178, 0.15);
+}
+.flip-back {
+    background: var(--navy);
+    border: 1px solid var(--teal);
+    transform: rotateY(180deg);
+}
+.flip-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: rgba(139, 190, 178, 0.15);
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-weight: 900;
+}
+.flip-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+}
+.flip-title {
+    font-size: 1.3rem;
+    color: var(--lime);
+    font-weight: 700;
+}
+.flip-hint {
+    font-size: 0.75rem;
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 1rem;
+}
+.flip-back-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--lime);
+    margin-bottom: 1rem;
+}
+.flip-back-body {
+    font-size: 0.95rem;
+    color: rgba(230, 249, 175, 0.7);
+    line-height: 1.6;
+}
+
+/* TESTIMONIALS */
+.testi-section {
+    padding: 8rem 3rem;
+    background: var(--slate);
+    position: relative;
+    overflow: hidden;
+}
+.testi-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(139, 190, 178, 0.1) 1.5px, transparent 1.5px);
+    background-size: 32px 32px;
+}
+.testi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 4rem auto 0;
+    position: relative;
+}
+.testi-3d {
+    background: rgba(13, 6, 48, 0.6);
+    border: 1px solid rgba(139, 190, 178, 0.2);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    position: relative;
+    backdrop-filter: blur(10px);
+    transition: transform 0.1s ease-out; /* For JS tilt */
+}
+.testi-3d.tall {
+    transform: translateY(-20px);
+}
+.big-q {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    color: rgba(139, 190, 178, 0.2);
+    position: absolute;
+    top: -1rem;
+    left: 1.5rem;
+    line-height: 1;
+}
+.t-body {
+    font-size: 1.1rem;
+    color: var(--lime);
+    line-height: 1.7;
+    font-style: italic;
+    position: relative;
+    z-index: 2;
+}
+.t-sig {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+.t-line {
+    width: 30px;
+    height: 1px;
+    background: var(--teal);
+}
+.t-name {
+    font-size: 0.8rem;
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+/* CTA SECTION */
+.cta-section {
+    padding: 10rem 3rem;
+    background: var(--deep);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+}
+.cta-orb {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(139, 190, 178, 0.15) 0%, transparent 60%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 4s ease-in-out infinite alternate;
+}
+.cta-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+}
+.cta-h {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--lime);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+.sub-word {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.2rem;
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+.cta-p {
+    font-size: 1.1rem;
+    color: rgba(230, 249, 175, 0.7);
+    line-height: 1.6;
+    margin-bottom: 3rem;
+}
+.cta-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+.hbtn-fire {
+    background: var(--lime);
+    color: var(--deep);
+    padding: 1rem 2.5rem;
+    border-radius: 100px;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.hbtn-fire:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(230, 249, 175, 0.3);
+}
+.hbtn-ghost {
+    background: transparent;
+    color: var(--teal);
+    border: 1px solid var(--teal);
+    padding: 1rem 2.5rem;
+    border-radius: 100px;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background 0.2s, color 0.2s;
+}
+.hbtn-ghost:hover {
+    background: var(--teal);
+    color: var(--deep);
+}
+
+@media (max-width: 900px) {
+    .testi-grid { grid-template-columns: 1fr; }
+    .cta-h { font-size: 2.5rem; }
+}

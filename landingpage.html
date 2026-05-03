@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoundIt — College Lost & Found</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --deep: #0d0630;
+            --navy: #18314f;
+            --slate: #384e77;
+            --teal: #8bbeb2;
+            --lime: #e6f9af;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--deep);
+            color: var(--lime);
+            overflow-x: hidden;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 3rem;
+            background: rgba(13, 6, 48, 0.82);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(139, 190, 178, 0.12);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            font-style: italic;
+            color: var(--lime);
+            letter-spacing: -0.02em;
+        }
+
+        .logo span {
+            color: var(--teal);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        nav ul a {
+            text-decoration: none;
+            color: var(--teal);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+
+        nav ul a:hover {
+            color: var(--lime);
+        }
+
+        .nav-cta {
+            background: var(--lime);
+            color: var(--deep) !important;
+            padding: 0.55rem 1.3rem;
+            border-radius: 100px;
+            font-weight: 500 !important;
+            transition: background 0.2s, transform 0.15s !important;
+        }
+
+        .nav-cta:hover {
+            background: var(--teal) !important;
+            transform: translateY(-1px);
+            color: var(--deep) !important;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 3rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(139, 190, 178, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 190, 178, 0.06) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: 10%;
+            right: -10%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(ellipse, rgba(56, 78, 119, 0.6) 0%, transparent 60%);
+            pointer-events: none;
+            animation: pulse 6s ease-in-out infinite alternate;
+        }
+
+        .hero-glow2 {
+            position: absolute;
+            bottom: -20%;
+            left: -5%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(ellipse, rgba(139, 190, 178, 0.12) 0%, transparent 60%);
+            pointer-events: none;
+            animation: pulse 8s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+
+            to {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(56, 78, 119, 0.5);
+            border: 1px solid rgba(139, 190, 178, 0.25);
+            color: var(--teal);
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            margin-bottom: 2rem;
+            animation: fadeUp 0.7s ease both;
+        }
+
+        .badge-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--lime);
+            animation: blink 2s ease infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3.2rem, 6vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.025em;
+            color: var(--lime);
+            margin-bottom: 1.6rem;
+            animation: fadeUp 0.7s 0.1s ease both;
+        }
+
+        h1 em {
+            font-style: italic;
+            color: var(--teal);
+        }
+
+        .hero-sub {
+            font-size: 1.15rem;
+            font-weight: 300;
+            line-height: 1.7;
+            color: rgba(230, 249, 175, 0.7);
+            max-width: 500px;
+            margin-bottom: 2.8rem;
+            animation: fadeUp 0.7s 0.2s ease both;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: fadeUp 0.7s 0.3s ease both;
+        }
+
+        .btn-primary {
+            background: var(--lime);
+            color: var(--deep);
+            padding: 0.9rem 2.2rem;
+            border: none;
+            border-radius: 100px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--teal);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(139, 190, 178, 0.25);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--teal);
+            padding: 0.9rem 2.2rem;
+            border: 1px solid rgba(139, 190, 178, 0.35);
+            border-radius: 100px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 400;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--teal);
+            background: rgba(139, 190, 178, 0.08);
+        }
+
+        /* Floating items illustration */
+        .hero-float {
+            position: absolute;
+            right: 3rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            animation: fadeUp 0.9s 0.4s ease both;
+            z-index: 2;
+        }
+
+        .float-card {
+            width: 130px;
+            background: rgba(24, 49, 79, 0.7);
+            border: 1px solid rgba(139, 190, 178, 0.18);
+            border-radius: 18px;
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            backdrop-filter: blur(8px);
+            transition: transform 0.3s;
+            cursor: default;
+        }
+
+        .float-card:hover {
+            transform: translateY(-4px) scale(1.03);
+        }
+
+        .float-card:nth-child(2) {
+            margin-top: 2rem;
+        }
+
+        .float-card:nth-child(4) {
+            margin-top: 2rem;
+        }
+
+        .float-icon {
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        .float-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--teal);
+            text-align: center;
+        }
+
+        .float-tag {
+            font-size: 0.65rem;
+            background: rgba(230, 249, 175, 0.12);
+            color: var(--lime);
+            padding: 0.2rem 0.6rem;
+            border-radius: 100px;
+        }
+
+        /* ── SEARCH SECTION ── */
+        .search-section {
+            background: var(--navy);
+            padding: 5rem 3rem;
+            position: relative;
+        }
+
+        .search-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(139, 190, 178, 0.3), transparent);
+        }
+
+        .section-center {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 700;
+            color: var(--lime);
+            line-height: 1.15;
+            margin-bottom: 1.2rem;
+        }
+
+        .search-box {
+            display: flex;
+            background: rgba(13, 6, 48, 0.6);
+            border: 1px solid rgba(139, 190, 178, 0.25);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 2.5rem;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus-within {
+            border-color: rgba(139, 190, 178, 0.6);
+        }
+
+        .search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 1.2rem 1.5rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            color: var(--lime);
+        }
+
+        .search-box input::placeholder {
+            color: rgba(139, 190, 178, 0.4);
+        }
+
+        .search-box select {
+            background: rgba(56, 78, 119, 0.5);
+            border: none;
+            border-left: 1px solid rgba(139, 190, 178, 0.15);
+            border-right: 1px solid rgba(139, 190, 178, 0.15);
+            color: var(--teal);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            padding: 0 1.2rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .search-box select option {
+            background: var(--navy);
+        }
+
+        .search-box button {
+            background: var(--lime);
+            color: var(--deep);
+            border: none;
+            padding: 1.2rem 2rem;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .search-box button:hover {
+            background: var(--teal);
+        }
+
+        /* Filter tags */
+        .filter-tags {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1.2rem;
+        }
+
+        .tag {
+            background: rgba(56, 78, 119, 0.4);
+            border: 1px solid rgba(139, 190, 178, 0.18);
+            color: var(--teal);
+            font-size: 0.8rem;
+            padding: 0.35rem 0.9rem;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s, color 0.2s;
+        }
+
+        .tag:hover,
+        .tag.active {
+            background: var(--teal);
+            color: var(--deep);
+            border-color: var(--teal);
+        }
+
+        /* ── RECENT ITEMS ── */
+        .items-section {
+            padding: 6rem 3rem;
+            background: var(--deep);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .items-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+        }
+
+        .items-header a {
+            color: var(--teal);
+            font-size: 0.9rem;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(139, 190, 178, 0.3);
+            padding-bottom: 2px;
+            transition: color 0.2s;
+        }
+
+        .items-header a:hover {
+            color: var(--lime);
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .item-card {
+            background: var(--navy);
+            border: 1px solid rgba(139, 190, 178, 0.12);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+            cursor: pointer;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 190, 178, 0.35);
+            box-shadow: 0 16px 50px rgba(13, 6, 48, 0.5);
+        }
+
+        .item-img {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            background: rgba(56, 78, 119, 0.3);
+            border-bottom: 1px solid rgba(139, 190, 178, 0.08);
+        }
+
+        .item-body {
+            padding: 1.2rem 1.4rem;
+        }
+
+        .item-status {
+            display: inline-block;
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.7rem;
+            border-radius: 100px;
+            margin-bottom: 0.7rem;
+        }
+
+        .status-found {
+            background: rgba(139, 190, 178, 0.15);
+            color: var(--teal);
+            border: 1px solid rgba(139, 190, 178, 0.25);
+        }
+
+        .status-lost {
+            background: rgba(230, 249, 175, 0.1);
+            color: var(--lime);
+            border: 1px solid rgba(230, 249, 175, 0.2);
+        }
+
+        .item-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--lime);
+            margin-bottom: 0.4rem;
+        }
+
+        .item-meta {
+            font-size: 0.8rem;
+            color: rgba(139, 190, 178, 0.65);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .item-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* ── HOW IT WORKS ── */
+        .how-section {
+            background: var(--slate);
+            padding: 6rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .how-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(139, 190, 178, 0.05) 1.5px, transparent 1.5px);
+            background-size: 32px 32px;
+        }
+
+        .how-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .how-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .step {
+            position: relative;
+            padding: 2rem;
+            background: rgba(13, 6, 48, 0.4);
+            border: 1px solid rgba(139, 190, 178, 0.15);
+            border-radius: 22px;
+            backdrop-filter: blur(6px);
+            transition: transform 0.25s;
+        }
+
+        .step:hover {
+            transform: translateY(-4px);
+        }
+
+        .step-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: rgba(139, 190, 178, 0.12);
+            line-height: 1;
+            margin-bottom: 1rem;
+            letter-spacing: -0.04em;
+        }
+
+        .step-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .step h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--lime);
+            margin-bottom: 0.7rem;
+        }
+
+        .step p {
+            font-size: 0.9rem;
+            font-weight: 300;
+            line-height: 1.7;
+            color: rgba(230, 249, 175, 0.6);
+        }
+
+        .step-connector {
+            position: absolute;
+            top: 50%;
+            right: -1rem;
+            transform: translateY(-50%);
+            color: rgba(139, 190, 178, 0.3);
+            font-size: 1.5rem;
+            z-index: 2;
+        }
+
+        /* ── STATS ── */
+        .stats-section {
+            background: var(--navy);
+            padding: 5rem 3rem;
+            border-top: 1px solid rgba(139, 190, 178, 0.08);
+            border-bottom: 1px solid rgba(139, 190, 178, 0.08);
+        }
+
+        .stats-grid {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            color: var(--lime);
+            line-height: 1;
+            margin-bottom: 0.4rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: rgba(139, 190, 178, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        /* ── REPORT CTA ── */
+        .report-section {
+            padding: 6rem 3rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .report-text h2 {
+            text-align: left;
+            margin-bottom: 1rem;
+        }
+
+        .report-text p {
+            font-size: 1rem;
+            font-weight: 300;
+            line-height: 1.8;
+            color: rgba(230, 249, 175, 0.65);
+            margin-bottom: 2rem;
+        }
+
+        .report-card {
+            background: var(--navy);
+            border: 1px solid rgba(139, 190, 178, 0.18);
+            border-radius: 24px;
+            padding: 2.5rem;
+        }
+
+        .form-row {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--teal);
+            margin-bottom: 0.45rem;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(13, 6, 48, 0.5);
+            border: 1px solid rgba(139, 190, 178, 0.2);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            color: var(--lime);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input::placeholder {
+            color: rgba(139, 190, 178, 0.3);
+        }
+
+        .form-input:focus {
+            border-color: rgba(139, 190, 178, 0.55);
+        }
+
+        .form-row-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--deep);
+            border-top: 1px solid rgba(139, 190, 178, 0.1);
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 900;
+            font-style: italic;
+            color: var(--lime);
+        }
+
+        .footer-logo span {
+            color: var(--teal);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            font-size: 0.82rem;
+            color: rgba(139, 190, 178, 0.6);
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--lime);
+        }
+
+        .footer-copy {
+            font-size: 0.78rem;
+            color: rgba(139, 190, 178, 0.35);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .hero-float {
+                display: none;
+            }
+
+            .how-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .report-section {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="logo">Found<span>It</span></div>
+        <ul>
+            <li><a href="#">Browse Items</a></li>
+            <li><a href="#">Report Lost</a></li>
+            <li><a href="#">Report Found</a></li>
+            <li><a href="#" class="nav-cta">My Claims</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg-grid"></div>
+        <div class="hero-glow"></div>
+        <div class="hero-glow2"></div>
+
+        <div class="hero-inner">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Westfield University · Official Platform
+            </div>
+            <h1>Lost something?<br>We'll help you<br><em>find it.</em></h1>
+            <p class="hero-sub">The official lost & found portal for Westfield University. Report, search, and reclaim
+                your belongings — fast and hassle-free.</p>
+            <div class="hero-actions">
+                <a href="#" class="btn-primary">🔍 Search Items</a>
+                <a href="#" class="btn-secondary">+ Report an Item</a>
+            </div>
+        </div>
+
+        <div class="hero-float">
+            <div class="float-card">
+                <div class="float-icon">🎒</div>
+                <div class="float-label">Backpack</div>
+                <div class="float-tag">Found · A Block</div>
+            </div>
+            <div class="float-card">
+                <div class="float-icon">📱</div>
+                <div class="float-label">Phone</div>
+                <div class="float-tag">Lost · Library</div>
+            </div>
+            <div class="float-card">
+                <div class="float-icon">🔑</div>
+                <div class="float-label">Keys</div>
+                <div class="float-tag">Found · Canteen</div>
+            </div>
+            <div class="float-card">
+                <div class="float-icon">🕶️</div>
+                <div class="float-label">Sunglasses</div>
+                <div class="float-tag">Found · Gym</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEARCH -->
+    <section class="search-section">
+        <div class="section-center">
+            <p class="section-label">Search Database</p>
+            <h2>What are you looking for?</h2>
+            <p style="color: rgba(139,190,178,0.65); font-size:0.95rem; font-weight:300; margin-top:0.5rem;">Over 400
+                items currently in our system across all campus locations.</p>
+
+            <div class="search-box">
+                <input type="text" placeholder="Describe the item — color, brand, name...">
+                <select>
+                    <option>All Locations</option>
+                    <option>Library</option>
+                    <option>Cafeteria</option>
+                    <option>Gym</option>
+                    <option>A Block</option>
+                    <option>B Block</option>
+                    <option>Auditorium</option>
+                    <option>Hostel</option>
+                </select>
+                <button>Search →</button>
+            </div>
+
+            <div class="filter-tags">
+                <span class="tag active">All</span>
+                <span class="tag">Electronics</span>
+                <span class="tag">Bags</span>
+                <span class="tag">Keys & Cards</span>
+                <span class="tag">Clothing</span>
+                <span class="tag">Books & Notes</span>
+                <span class="tag">Accessories</span>
+                <span class="tag">Other</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- RECENT ITEMS -->
+    <div style="background: var(--deep); padding: 6rem 3rem;">
+        <div class="items-section" style="padding:0; max-width:1100px; margin:0 auto;">
+            <div class="items-header">
+                <div>
+                    <p class="section-label">Latest Updates</p>
+                    <h2 style="font-size:2rem;">Recently Added Items</h2>
+                </div>
+                <a href="#">View all items →</a>
+            </div>
+
+            <div class="items-grid">
+                <div class="item-card">
+                    <div class="item-img">🎧</div>
+                    <div class="item-body">
+                        <span class="item-status status-found">Found</span>
+                        <div class="item-name">Wireless Headphones</div>
+                        <div class="item-meta">
+                            <span>📍 Library, Floor 2</span>
+                            <span>🕐 2 hours ago</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="item-card">
+                    <div class="item-img">💼</div>
+                    <div class="item-body">
+                        <span class="item-status status-lost">Lost</span>
+                        <div class="item-name">Blue Canvas Tote Bag</div>
+                        <div class="item-meta">
+                            <span>📍 Cafeteria</span>
+                            <span>🕐 5 hours ago</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="item-card">
+                    <div class="item-img">📒</div>
+                    <div class="item-body">
+                        <span class="item-status status-found">Found</span>
+                        <div class="item-name">Chemistry Notes Binder</div>
+                        <div class="item-meta">
+                            <span>📍 A Block Hallway</span>
+                            <span>🕐 Yesterday</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="item-card">
+                    <div class="item-img">🔑</div>
+                    <div class="item-body">
+                        <span class="item-status status-found">Found</span>
+                        <div class="item-name">Keychain with 3 Keys</div>
+                        <div class="item-meta">
+                            <span>📍 Gym Entrance</span>
+                            <span>🕐 Yesterday</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-section">
+        <div class="how-inner">
+            <div style="text-align:center;">
+                <p class="section-label">Simple Process</p>
+                <h2>How FoundIt Works</h2>
+                <p
+                    style="color:rgba(230,249,175,0.55); font-size:0.95rem; font-weight:300; margin-top:0.5rem; max-width:450px; margin-left:auto; margin-right:auto;">
+                    Getting your item back takes just a few steps. No forms, no queues, no stress.</p>
+            </div>
+            <div class="how-steps">
+                <div class="step">
+                    <div class="step-num">01</div>
+                    <span class="step-icon">📝</span>
+                    <h3>Report It</h3>
+                    <p>Fill in a quick form describing your lost item — what it looks like, where you last had it, and
+                        when you lost it.</p>
+                    <span class="step-connector">→</span>
+                </div>
+                <div class="step">
+                    <div class="step-num">02</div>
+                    <span class="step-icon">🔎</span>
+                    <h3>We Match It</h3>
+                    <p>Our system scans submissions from students who found items and notifies you the moment a match is
+                        detected.</p>
+                    <span class="step-connector">→</span>
+                </div>
+                <div class="step">
+                    <div class="step-num">03</div>
+                    <span class="step-icon">🎉</span>
+                    <h3>Claim It</h3>
+                    <p>Verify your identity at the campus security desk with your student ID and pick up your item. Easy
+                        as that.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div>
+                <div class="stat-num">1,240+</div>
+                <div class="stat-label">Items Returned</div>
+            </div>
+            <div>
+                <div class="stat-num">89%</div>
+                <div class="stat-label">Recovery Rate</div>
+            </div>
+            <div>
+                <div class="stat-num">4 hrs</div>
+                <div class="stat-label">Avg. Match Time</div>
+            </div>
+            <div>
+                <div class="stat-num">12k+</div>
+                <div class="stat-label">Students Registered</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REPORT FORM CTA -->
+    <div style="background: var(--deep);">
+        <section class="report-section">
+            <div class="report-text">
+                <p class="section-label">Lost Something?</p>
+                <h2>File a Report in Under a Minute</h2>
+                <p>The sooner you report, the better your chances. Our team checks submissions every hour and alerts you
+                    the moment your item is found.</p>
+                <a href="#" class="btn-primary">Report a Lost Item →</a>
+            </div>
+
+            <div class="report-card">
+                <p
+                    style="font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--lime); margin-bottom:1.5rem;">
+                    Quick Report</p>
+                <div class="form-row">
+                    <label class="form-label">Item Name</label>
+                    <input class="form-input" type="text" placeholder="e.g. Black Sony headphones">
+                </div>
+                <div class="form-row-split">
+                    <div>
+                        <label class="form-label">Category</label>
+                        <select class="form-input" style="cursor:pointer; appearance:auto;">
+                            <option style="background:var(--navy)">Electronics</option>
+                            <option style="background:var(--navy)">Bags</option>
+                            <option style="background:var(--navy)">Keys</option>
+                            <option style="background:var(--navy)">Clothing</option>
+                            <option style="background:var(--navy)">Books</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label">Last Seen At</label>
+                        <input class="form-input" type="text" placeholder="Library, Canteen...">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Your Student Email</label>
+                    <input class="form-input" type="email" placeholder="yourname@westfield.edu">
+                </div>
+                <button class="btn-primary" style="width:100%; justify-content:center; margin-top:0.5rem;">Submit Report
+                    →</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-logo">Found<span>It</span></div>
+        <ul class="footer-links">
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Contact Security</a></li>
+            <li><a href="#">Admin Portal</a></li>
+        </ul>
+        <p class="footer-copy">© 2025 Westfield University Lost & Found</p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+            });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.style.animation = 'fadeUp 0.6s ease both';
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.item-card, .step, .stat-num').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+
+</html>
