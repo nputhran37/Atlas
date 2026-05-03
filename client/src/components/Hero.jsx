@@ -158,10 +158,10 @@ const Hero = () => {
             <div className="hero-inner">
                 <div className="hero-badge">
                     <span className="badge-dot"></span>
-                    Westfield University · Official Platform
+                    Dwarkadas J. Sanghvi College Of Engineering · Official Platform
                 </div>
                 <h1>Lost something?<br/>We'll help you<br/><em>find it.</em></h1>
-                <p className="hero-sub">The official lost & found portal for Westfield University. Report, search, and reclaim your belongings — fast and hassle-free.</p>
+                <p className="hero-sub">The official lost & found portal for Dwarkadas J. Sanghvi College Of Engineering. Report, search, and reclaim your belongings — fast and hassle-free.</p>
                 <div className="hero-actions">
                     <a href="#" className="btn-primary">🔍 Search Items</a>
                     <a href="#" className="btn-secondary">+ Report an Item</a>

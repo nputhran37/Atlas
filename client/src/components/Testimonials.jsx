@@ -49,7 +49,7 @@ const Testimonials = () => {
             <div className="testi-grid reveal">
                 <div className="testi-3d tall">
                     <span className="big-q">"</span>
-                    <p className="t-body">My laptop had my entire thesis on it. Westfield Security had it logged within hours. I got it back the very next morning — I was in tears.</p>
+                    <p className="t-body">My laptop had my entire thesis on it. DJSCE Security had it logged within hours. I got it back the very next morning — I was in tears.</p>
                     <div className="t-sig">
                         <div className="t-line"></div><span className="t-name">Priya R. — MSc Computer Science</span>
                     </div>

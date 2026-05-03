@@ -1,11 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
 import LandingPage from './pages/LandingPage';
 import ReportItemPage from './pages/ReportItemPage';
 import ReportFoundPage from './pages/ReportFoundPage';
 import BrowseItemsPage from './pages/BrowseItemsPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import './index.css';
 import './extra.css';
+
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  return user ? children : <Navigate to="/login" />;
+};
 
 function App() {
   return (
@@ -14,8 +23,18 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/browse" element={<BrowseItemsPage />} />
-          <Route path="/report-lost" element={<ReportItemPage />} />
-          <Route path="/report-found" element={<ReportFoundPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/report-lost" element={
+            <ProtectedRoute>
+              <ReportItemPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/report-found" element={
+            <ProtectedRoute>
+              <ReportFoundPage />
+            </ProtectedRoute>
+          } />
         </Routes>
       </div>
     </Router>

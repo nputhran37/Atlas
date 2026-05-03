@@ -9,6 +9,7 @@ const path = require('path');
 require('dotenv').config();
 
 const itemRoutes = require('./routes/itemRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
 app.use('/api/items', itemRoutes);
+app.use('/api/auth', authRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, { family: 4 })
