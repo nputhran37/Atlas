@@ -9,6 +9,8 @@ const itemSchema = new mongoose.Schema({
     image: { type: String }, // URL or path to the image
     status: { type: String, enum: ['active', 'resolved'], default: 'active' }, // Is it still lost/found or returned?
     contactInfo: { type: String, required: true }, // Phone number or email
+    dateLost: { type: String }, // User input date
+    timeLost: { type: String }, // User input time
     date: { type: Date, default: Date.now }
 });
 
