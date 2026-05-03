@@ -16,7 +16,7 @@ const Navbar = () => {
                 {user ? (
                     <>
                         <li style={{ color: 'var(--lime)', fontWeight: '600', marginLeft: '1rem' }}>Hi, {user.name.split(' ')[0]}</li>
-                        <li><button onClick={logout} className="nav-cta" style={{ background: 'rgba(255,100,100,0.1)', color: '#ff8888', border: '1px solid #ff8888' }}>Logout</button></li>
+                        <li><button onClick={logout} className="nav-cta nav-logout">Logout</button></li>
                     </>
                 ) : (
                     <li><Link to="/login" className="nav-cta">Login</Link></li>

@@ -76,17 +76,29 @@
 
         .nav-cta {
             background: var(--lime);
-            color: var(--deep) !important;
+            color: var(--deep);
             padding: 0.55rem 1.3rem;
             border-radius: 100px;
-            font-weight: 500 !important;
+            font-weight: 500;
             transition: background 0.2s, transform 0.15s !important;
         }
 
         .nav-cta:hover {
-            background: var(--teal) !important;
+            background: var(--teal);
             transform: translateY(-1px);
-            color: var(--deep) !important;
+            color: var(--deep);
+        }
+
+        .nav-logout {
+            background: rgba(255, 100, 100, 0.1);
+            color: #ff8888;
+            border: 1px solid #ff8888;
+            cursor: pointer;
+        }
+
+        .nav-logout:hover {
+            background: #ff8888;
+            color: var(--deep);
         }
 
         /* ── HERO ── */
