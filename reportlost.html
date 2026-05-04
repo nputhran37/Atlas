@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Lost Item — FoundIt</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --deep: #0d0630;
+            --navy: #18314f;
+            --slate: #384e77;
+            --teal: #8bbeb2;
+            --lime: #e6f9af;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--deep);
+            color: var(--lime);
+            overflow-x: hidden;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 3rem;
+            background: rgba(13, 6, 48, 0.88);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(139, 190, 178, 0.12);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            font-style: italic;
+            color: var(--lime);
+            letter-spacing: -0.02em;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--teal);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        nav ul a {
+            text-decoration: none;
+            color: var(--teal);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+
+        nav ul a:hover {
+            color: var(--lime);
+        }
+
+        nav ul a.active {
+            color: var(--lime);
+        }
+
+        .nav-cta {
+            background: var(--lime);
+            color: var(--deep) !important;
+            padding: 0.55rem 1.3rem;
+            border-radius: 100px;
+            font-weight: 500 !important;
+        }
+
+        .page-wrap {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            min-height: 100vh;
+        }
+
+        /* LEFT PANEL */
+        .left-panel {
+            background: var(--slate);
+            padding: 8rem 3.5rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(139, 190, 178, 0.06) 1.5px, transparent 1.5px);
+            background-size: 28px 28px;
+            pointer-events: none;
+        }
+
+        .left-panel::after {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(ellipse, rgba(139, 190, 178, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .lp-inner {
+            position: relative;
+            z-index: 2;
+        }
+
+        .lp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(13, 6, 48, 0.4);
+            border: 1px solid rgba(139, 190, 178, 0.2);
+            color: var(--teal);
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.35rem 0.9rem;
+            border-radius: 100px;
+            margin-bottom: 2rem;
+        }
+
+        .lp-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 900;
+            color: var(--lime);
+            line-height: 1.1;
+            margin-bottom: 1.2rem;
+        }
+
+        .lp-title em {
+            font-style: italic;
+            color: var(--teal);
+        }
+
+        .lp-desc {
+            font-size: 0.95rem;
+            font-weight: 300;
+            line-height: 1.8;
+            color: rgba(230, 249, 175, 0.6);
+            margin-bottom: 3rem;
+            max-width: 360px;
+        }
+
+        .tip-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .tip {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .tip-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: rgba(13, 6, 48, 0.35);
+            border: 1px solid rgba(139, 190, 178, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .tip-text strong {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--lime);
+            margin-bottom: 0.2rem;
+        }
+
+        .tip-text span {
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: rgba(139, 190, 178, 0.55);
+        }
+
+        /* RIGHT PANEL — FORM */
+        .right-panel {
+            background: var(--navy);
+            padding: 8rem 2.5rem 4rem;
+            overflow-y: auto;
+        }
+
+        /* STEP PROGRESS */
+        .step-progress {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 3rem;
+        }
+
+        .sp-step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .sp-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 500;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .sp-num.done {
+            background: var(--teal);
+            color: var(--deep);
+        }
+
+        .sp-num.active {
+            background: var(--lime);
+            color: var(--deep);
+        }
+
+        .sp-num.pending {
+            background: rgba(56, 78, 119, 0.5);
+            color: rgba(139, 190, 178, 0.4);
+            border: 1px solid rgba(139, 190, 178, 0.15);
+        }
+
+        .sp-label {
+            font-size: 0.72rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .sp-label.active {
+            color: var(--lime);
+        }
+
+        .sp-label.done {
+            color: var(--teal);
+        }
+
+        .sp-label.pending {
+            color: rgba(139, 190, 178, 0.35);
+        }
+
+        .sp-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(139, 190, 178, 0.15);
+            margin: 0 0.5rem;
+        }
+
+        .sp-line.done {
+            background: var(--teal);
+        }
+
+        /* FORM STEPS */
+        .form-step {
+            display: none;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .step-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--lime);
+            margin-bottom: 0.4rem;
+        }
+
+        .step-sub {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: rgba(139, 190, 178, 0.55);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.3rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(139, 190, 178, 0.5);
+            margin-bottom: 0.45rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            background: rgba(13, 6, 48, 0.5);
+            border: 1px solid rgba(139, 190, 178, 0.18);
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            color: var(--lime);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: rgba(139, 190, 178, 0.25);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: rgba(139, 190, 178, 0.5);
+        }
+
+        .form-select option {
+            background: var(--navy);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.6;
+        }
+
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-hint {
+            font-size: 0.75rem;
+            color: rgba(139, 190, 178, 0.35);
+            margin-top: 0.35rem;
+        }
+
+        /* CATEGORY PICKER */
+        .cat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.7rem;
+            margin-top: 0.5rem;
+        }
+
+        .cat-opt {
+            background: rgba(13, 6, 48, 0.4);
+            border: 1px solid rgba(139, 190, 178, 0.14);
+            border-radius: 12px;
+            padding: 0.9rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cat-opt:hover {
+            border-color: rgba(139, 190, 178, 0.3);
+        }
+
+        .cat-opt.on {
+            background: rgba(139, 190, 178, 0.1);
+            border-color: var(--teal);
+        }
+
+        .cat-icon {
+            font-size: 1.6rem;
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+
+        .cat-name {
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: rgba(139, 190, 178, 0.7);
+        }
+
+        .cat-opt.on .cat-name {
+            color: var(--teal);
+        }
+
+        /* LOCATION MAP VISUAL */
+        .location-map {
+            background: rgba(13, 6, 48, 0.4);
+            border: 1px solid rgba(139, 190, 178, 0.12);
+            border-radius: 14px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+
+        .loc-btn {
+            background: rgba(56, 78, 119, 0.3);
+            border: 1px solid rgba(139, 190, 178, 0.12);
+            border-radius: 8px;
+            padding: 0.6rem 0.4rem;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.72rem;
+            color: rgba(139, 190, 178, 0.6);
+            transition: all 0.2s;
+        }
+
+        .loc-btn:hover {
+            border-color: rgba(139, 190, 178, 0.3);
+            color: var(--teal);
+        }
+
+        .loc-btn.on {
+            background: rgba(139, 190, 178, 0.12);
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .loc-icon {
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        /* UPLOAD */
+        .upload-zone {
+            background: rgba(13, 6, 48, 0.4);
+            border: 2px dashed rgba(139, 190, 178, 0.18);
+            border-radius: 14px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .upload-zone:hover {
+            border-color: rgba(139, 190, 178, 0.35);
+            background: rgba(139, 190, 178, 0.04);
+        }
+
+        .upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.7rem;
+            display: block;
+            opacity: 0.6;
+        }
+
+        .upload-text {
+            font-size: 0.85rem;
+            color: rgba(139, 190, 178, 0.5);
+        }
+
+        .upload-sub {
+            font-size: 0.75rem;
+            color: rgba(139, 190, 178, 0.3);
+            margin-top: 0.3rem;
+        }
+
+        /* REVIEW STEP */
+        .review-card {
+            background: rgba(13, 6, 48, 0.4);
+            border: 1px solid rgba(139, 190, 178, 0.12);
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .rc-title {
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(139, 190, 178, 0.4);
+            margin-bottom: 1rem;
+        }
+
+        .rc-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(139, 190, 178, 0.07);
+        }
+
+        .rc-row:last-child {
+            border-bottom: none;
+        }
+
+        .rc-key {
+            font-size: 0.82rem;
+            color: rgba(139, 190, 178, 0.5);
+        }
+
+        .rc-val {
+            font-size: 0.82rem;
+            color: var(--lime);
+            font-weight: 500;
+            text-align: right;
+            max-width: 60%;
+        }
+
+        /* BUTTONS */
+        .btn-row {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+
+        .btn-next {
+            flex: 1;
+            background: var(--lime);
+            color: var(--deep);
+            padding: 0.9rem;
+            border: none;
+            border-radius: 100px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn-next:hover {
+            background: var(--teal);
+            transform: translateY(-1px);
+        }
+
+        .btn-back {
+            background: transparent;
+            color: var(--teal);
+            padding: 0.9rem 1.5rem;
+            border: 1px solid rgba(139, 190, 178, 0.25);
+            border-radius: 100px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-back:hover {
+            border-color: var(--teal);
+            background: rgba(139, 190, 178, 0.06);
+        }
+
+        /* SUCCESS */
+        .success-state {
+            text-align: center;
+            padding: 2rem 0;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .success-state h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--lime);
+            margin-bottom: 0.7rem;
+        }
+
+        .success-state p {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: rgba(139, 190, 178, 0.6);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .report-id {
+            background: rgba(139, 190, 178, 0.08);
+            border: 1px solid rgba(139, 190, 178, 0.18);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-family: 'DM Sans', monospace;
+            font-size: 0.85rem;
+            color: var(--teal);
+            letter-spacing: 0.1em;
+        }
+
+        footer {
+            background: var(--deep);
+            border-top: 1px solid rgba(139, 190, 178, 0.1);
+            padding: 2.5rem 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 900;
+            font-style: italic;
+            color: var(--lime);
+        }
+
+        .footer-logo span {
+            color: var(--teal);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            font-size: 0.82rem;
+            color: rgba(139, 190, 178, 0.5);
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--lime);
+        }
+
+        .footer-copy {
+            font-size: 0.75rem;
+            color: rgba(139, 190, 178, 0.25);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media(max-width:900px) {
+            .page-wrap {
+                grid-template-columns: 1fr;
+            }
+
+            .left-panel {
+                display: none;
+            }
+
+            nav ul {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">Found<span>It</span></a>
+        <ul>
+            <li><a href="browse.html">Browse Items</a></li>
+            <li><a href="report-lost.html" class="active">Report Lost</a></li>
+            <li><a href="report-found.html">Report Found</a></li>
+            <li><a href="how-it-works.html">How It Works</a></li>
+            <li><a href="dashboard.html" class="nav-cta">My Dashboard</a></li>
+        </ul>
+    </nav>
+
+    <div class="page-wrap">
+        <!-- LEFT -->
+        <div class="left-panel">
+            <div class="lp-inner">
+                <div class="lp-badge">📝 Report a Lost Item</div>
+                <h1 class="lp-title">Tell us what<br>you <em>lost.</em></h1>
+                <p class="lp-desc">The more detail you give us, the faster we can match your item. Reports are reviewed
+                    hourly — most matches are found within 4 hours.</p>
+                <div class="tip-list">
+                    <div class="tip">
+                        <div class="tip-icon">⚡</div>
+                        <div class="tip-text"><strong>Fast matching</strong><span>Our system cross-checks your report
+                                against found items every hour.</span></div>
+                    </div>
+                    <div class="tip">
+                        <div class="tip-icon">🔔</div>
+                        <div class="tip-text"><strong>Instant alerts</strong><span>You'll get an email the moment a
+                                potential match is identified.</span></div>
+                    </div>
+                    <div class="tip">
+                        <div class="tip-icon">🔒</div>
+                        <div class="tip-text"><strong>Verified claims</strong><span>Items are only released to verified
+                                owners with student ID.</span></div>
+                    </div>
+                    <div class="tip">
+                        <div class="tip-icon">📅</div>
+                        <div class="tip-text"><strong>30-day hold</strong><span>All found items are kept for 30 days
+                                before being donated.</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT — FORM -->
+        <div class="right-panel">
+
+            <!-- PROGRESS -->
+            <div class="step-progress">
+                <div class="sp-step">
+                    <div class="sp-num active" id="sn1">1</div>
+                    <span class="sp-label active" id="sl1">Item</span>
+                </div>
+                <div class="sp-line" id="line1"></div>
+                <div class="sp-step">
+                    <div class="sp-num pending" id="sn2">2</div>
+                    <span class="sp-label pending" id="sl2">Location</span>
+                </div>
+                <div class="sp-line" id="line2"></div>
+                <div class="sp-step">
+                    <div class="sp-num pending" id="sn3">3</div>
+                    <span class="sp-label pending" id="sl3">Details</span>
+                </div>
+                <div class="sp-line" id="line3"></div>
+                <div class="sp-step">
+                    <div class="sp-num pending" id="sn4">4</div>
+                    <span class="sp-label pending" id="sl4">Review</span>
+                </div>
+            </div>
+
+            <!-- STEP 1: ITEM INFO -->
+            <div class="form-step active" id="step1">
+                <div class="step-title">What did you lose?</div>
+                <div class="step-sub">Give us a name and category for your item.</div>
+
+                <div class="form-group">
+                    <label class="form-label">Item Name *</label>
+                    <input class="form-input" type="text" placeholder="e.g. Black Sony WH-1000XM5 Headphones">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Category *</label>
+                    <div class="cat-grid">
+                        <div class="cat-opt on" onclick="selectCat(this)"><span class="cat-icon">📱</span><span
+                                class="cat-name">Electronics</span></div>
+                        <div class="cat-opt" onclick="selectCat(this)"><span class="cat-icon">🎒</span><span
+                                class="cat-name">Bags</span></div>
+                        <div class="cat-opt" onclick="selectCat(this)"><span class="cat-icon">🔑</span><span
+                                class="cat-name">Keys & Cards</span></div>
+                        <div class="cat-opt" onclick="selectCat(this)"><span class="cat-icon">👕</span><span
+                                class="cat-name">Clothing</span></div>
+                        <div class="cat-opt" onclick="selectCat(this)"><span class="cat-icon">📚</span><span
+                                class="cat-name">Books</span></div>
+                        <div class="cat-opt" onclick="selectCat(this)"><span class="cat-icon">💎</span><span
+                                class="cat-name">Accessories</span></div>
+                        <div class="cat-opt" onclick="selectCat(this)"><span class="cat-icon">⚽</span><span
+                                class="cat-name">Sports Gear</span></div>
+                        <div class="cat-opt" onclick="selectCat(this)"><span class="cat-icon">🎨</span><span
+                                class="cat-name">Stationery</span></div>
+                        <div class="cat-opt" onclick="selectCat(this)"><span class="cat-icon">📦</span><span
+                                class="cat-name">Other</span></div>
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label">Brand / Make</label>
+                        <input class="form-input" type="text" placeholder="e.g. Sony, Nike…">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Colour</label>
+                        <input class="form-input" type="text" placeholder="e.g. Black, Navy Blue…">
+                    </div>
+                </div>
+
+                <div class="btn-row">
+                    <button class="btn-next" onclick="goStep(2)">Continue →</button>
+                </div>
+            </div>
+
+            <!-- STEP 2: LOCATION -->
+            <div class="form-step" id="step2">
+                <div class="step-title">Where did you lose it?</div>
+                <div class="step-sub">Select the campus location and give as much detail as you can.</div>
+
+                <div class="form-group">
+                    <label class="form-label">Campus Location *</label>
+                    <div class="location-map">
+                        <div class="loc-btn on" onclick="selectLoc(this)"><span class="loc-icon">📚</span>Library</div>
+                        <div class="loc-btn" onclick="selectLoc(this)"><span class="loc-icon">🍽️</span>Cafeteria</div>
+                        <div class="loc-btn" onclick="selectLoc(this)"><span class="loc-icon">🏋️</span>Gymnasium</div>
+                        <div class="loc-btn" onclick="selectLoc(this)"><span class="loc-icon">🏢</span>A Block</div>
+                        <div class="loc-btn" onclick="selectLoc(this)"><span class="loc-icon">🏢</span>B Block</div>
+                        <div class="loc-btn" onclick="selectLoc(this)"><span class="loc-icon">🎭</span>Auditorium</div>
+                        <div class="loc-btn" onclick="selectLoc(this)"><span class="loc-icon">🏠</span>Hostel</div>
+                        <div class="loc-btn" onclick="selectLoc(this)"><span class="loc-icon">⚽</span>Sports Ground
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Specific Area / Floor</label>
+                    <input class="form-input" type="text" placeholder="e.g. Floor 2, near study carrels…">
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label">Date Lost *</label>
+                        <input class="form-input" type="date">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Approx. Time</label>
+                        <input class="form-input" type="time">
+                    </div>
+                </div>
+
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(1)">← Back</button>
+                    <button class="btn-next" onclick="goStep(3)">Continue →</button>
+                </div>
+            </div>
+
+            <!-- STEP 3: DETAILS + CONTACT -->
+            <div class="form-step" id="step3">
+                <div class="step-title">A few more details</div>
+                <div class="step-sub">Help us identify your item and get back to you.</div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea"
+                        placeholder="Describe any unique features, stickers, scratches, name labels, or anything that sets your item apart…"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Add Photos (Optional)</label>
+                    <div class="upload-zone">
+                        <span class="upload-icon">📸</span>
+                        <div class="upload-text">Drag & drop photos, or click to upload</div>
+                        <div class="upload-sub">JPG, PNG up to 5MB each · max 4 photos</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Your Student Email *</label>
+                    <input class="form-input" type="email" placeholder="yourname@westfield.edu">
+                    <div class="form-hint">We'll send match alerts to this address.</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Mobile Number (Optional)</label>
+                    <input class="form-input" type="tel" placeholder="+91 98765 43210">
+                    <div class="form-hint">For urgent matches only.</div>
+                </div>
+
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(2)">← Back</button>
+                    <button class="btn-next" onclick="goStep(4)">Review Report →</button>
+                </div>
+            </div>
+
+            <!-- STEP 4: REVIEW -->
+            <div class="form-step" id="step4">
+                <div class="step-title">Review your report</div>
+                <div class="step-sub">Check the details below before submitting.</div>
+
+                <div class="review-card">
+                    <div class="rc-title">Item Details</div>
+                    <div class="rc-row"><span class="rc-key">Item Name</span><span class="rc-val">Sony WH-1000XM5
+                            Headphones</span></div>
+                    <div class="rc-row"><span class="rc-key">Category</span><span class="rc-val">Electronics</span>
+                    </div>
+                    <div class="rc-row"><span class="rc-key">Brand</span><span class="rc-val">Sony</span></div>
+                    <div class="rc-row"><span class="rc-key">Colour</span><span class="rc-val">Black</span></div>
+                </div>
+
+                <div class="review-card">
+                    <div class="rc-title">Location &amp; Time</div>
+                    <div class="rc-row"><span class="rc-key">Location</span><span class="rc-val">Library</span></div>
+                    <div class="rc-row"><span class="rc-key">Specific Area</span><span class="rc-val">Floor 2, study
+                            carrels</span></div>
+                    <div class="rc-row"><span class="rc-key">Date Lost</span><span class="rc-val">May 3, 2025</span>
+                    </div>
+                    <div class="rc-row"><span class="rc-key">Approx. Time</span><span class="rc-val">2:30 PM</span>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="rc-title">Contact</div>
+                    <div class="rc-row"><span class="rc-key">Email</span><span
+                            class="rc-val">student@westfield.edu</span></div>
+                    <div class="rc-row"><span class="rc-key">Mobile</span><span class="rc-val">Not provided</span></div>
+                </div>
+
+                <div class="btn-row">
+                    <button class="btn-back" onclick="goStep(3)">← Back</button>
+                    <button class="btn-next" onclick="submitReport()">Submit Report ✓</button>
+                </div>
+            </div>
+
+            <!-- STEP 5: SUCCESS -->
+            <div class="form-step" id="step5">
+                <div class="success-state">
+                    <span class="success-icon">🎉</span>
+                    <h3>Report Submitted!</h3>
+                    <p>Your lost item report has been filed. We'll search our database every hour and send you an email
+                        the moment a match is found.</p>
+                    <div class="report-id">Report ID: #WFU-LOST-2025-1142</div>
+                    <a href="dashboard.html"
+                        style="display:block;background:var(--lime);color:var(--deep);padding:0.9rem 2rem;border-radius:100px;text-decoration:none;font-weight:500;margin-bottom:0.8rem;text-align:center;">View
+                        in Dashboard →</a>
+                    <a href="browse.html"
+                        style="display:block;background:transparent;color:var(--teal);padding:0.9rem 2rem;border-radius:100px;text-decoration:none;text-align:center;border:1px solid rgba(139,190,178,0.3);">Browse
+                        Found Items</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-logo">Found<span>It</span></div>
+        <ul class="footer-links">
+            <li><a href="how-it-works.html">FAQ</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Contact Security</a></li>
+        </ul>
+        <p class="footer-copy">© 2025 Westfield University Lost &amp; Found</p>
+    </footer>
+
+    <script>
+        let cur = 1;
+        function goStep(n) {
+            document.getElementById('step' + cur).classList.remove('active');
+            // update progress
+            for (let i = 1; i <= 4; i++) {
+                const sn = document.getElementById('sn' + i);
+                const sl = document.getElementById('sl' + i);
+                if (i < n) { sn.className = 'sp-num done'; sn.textContent = '✓'; sl.className = 'sp-label done'; }
+                else if (i === n) { sn.className = 'sp-num active'; sn.textContent = i; sl.className = 'sp-label active'; }
+                else { sn.className = 'sp-num pending'; sn.textContent = i; sl.className = 'sp-label pending'; }
+                if (i < 4) { const l = document.getElementById('line' + i); l.className = i < n ? 'sp-line done' : 'sp-line'; }
+            }
+            cur = n;
+            document.getElementById('step' + n).classList.add('active');
+            document.querySelector('.right-panel').scrollTop = 0;
+        }
+        function submitReport() {
+            document.getElementById('step4').classList.remove('active');
+            document.getElementById('step5').classList.add('active');
+            document.querySelector('.step-progress').style.display = 'none';
+        }
+        function selectCat(el) { document.querySelectorAll('.cat-opt').forEach(x => x.classList.remove('on')); el.classList.add('on'); }
+        function selectLoc(el) { document.querySelectorAll('.loc-btn').forEach(x => x.classList.remove('on')); el.classList.add('on'); }
+    </script>
+</body>
+
+</html>
