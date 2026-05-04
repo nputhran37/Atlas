@@ -20,6 +20,7 @@ const ReportFoundPage = () => {
         handoverPreference: 'drop_point', // 'meetup' or 'drop_point'
         dropPointSelect: 'Security Desk',
         customDetails: '',
+        phoneNumber: '',
     });
     
     const [questions, setQuestions] = useState(['', '']);
@@ -58,6 +59,8 @@ const ReportFoundPage = () => {
         let finalHandoverDetails = formData.customDetails;
         if (formData.handoverPreference === 'drop_point' && formData.dropPointSelect !== 'Other') {
             finalHandoverDetails = formData.dropPointSelect;
+        } else if (formData.handoverPreference === 'meetup') {
+            finalHandoverDetails = `Contact via Phone: ${formData.phoneNumber}`;
         }
 
         const data = new FormData();
@@ -181,6 +184,14 @@ const ReportFoundPage = () => {
                             <button type="button" onClick={addQuestion} style={{ width: '100%', background: 'transparent', color: 'var(--lime)', border: '1px dashed var(--lime)', borderRadius: '10px', padding: '0.6rem', cursor: 'pointer', fontSize: '0.8rem' }}>+ Add Question</button>
                         )}
 
+                        <div style={{ color: 'var(--teal)', fontSize: '0.9rem', marginBottom: '1rem', marginTop: '2rem', fontFamily: "'Playfair Display', serif" }}>📸 Photo (Optional)</div>
+                        <div className="upload-zone" onClick={() => document.getElementById('fileInput').click()} style={{ background: 'rgba(13, 6, 48, 0.4)', border: '2px dashed rgba(139, 190, 178, 0.18)', borderRadius: '14px', padding: '1.8rem', textAlign: 'center', cursor: 'pointer', transition: 'all 0.2s' }}>
+                            <span style={{ fontSize: '2rem', display: 'block', marginBottom: '0.5rem', opacity: 0.5 }}>📷</span>
+                            <div style={{ fontSize: '0.82rem', color: 'rgba(139, 190, 178, 0.45)' }}>{image ? image.name : 'Tap to upload a photo of the item'}</div>
+                            <input type="file" id="fileInput" onChange={handleFileChange} hidden accept="image/*" />
+                        </div>
+                        <div style={{ fontSize: '0.75rem', color: 'rgba(139, 190, 178, 0.3)', marginTop: '0.3rem' }}>Highly recommended for faster matching.</div>
+
                         <div style={{ color: 'var(--teal)', fontSize: '0.9rem', marginBottom: '1rem', marginTop: '2rem', fontFamily: "'Playfair Display', serif" }}>🏢 Handover Method</div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.7rem' }}>
                             {[
@@ -198,6 +209,13 @@ const ReportFoundPage = () => {
                                 </div>
                             ))}
                         </div>
+
+                        {formData.handoverPreference === 'meetup' && (
+                            <div style={{ marginTop: '1.2rem', animation: 'fadeIn 0.3s ease' }}>
+                                <label style={{ display: 'block', fontSize: '0.72rem', color: 'rgba(139, 190, 178, 0.5)', marginBottom: '0.45rem' }}>Phone Number (Required for coordination) *</label>
+                                <input className="form-input" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} required={formData.handoverPreference === 'meetup'} placeholder="e.g. +91 98765 43210" style={{ width: '100%', background: 'rgba(13, 6, 48, 0.5)', border: '1px solid var(--teal)', borderRadius: '12px', padding: '0.85rem 1rem', color: 'var(--lime)', outline: 'none' }} />
+                            </div>
+                        )}
 
                         {status.error && <div style={{ color: '#ff8888', marginTop: '1rem', fontSize: '0.85rem' }}>{status.error}</div>}
 

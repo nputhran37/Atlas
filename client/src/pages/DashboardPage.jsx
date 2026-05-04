@@ -8,12 +8,14 @@ const DashboardPage = () => {
     const { user } = useAuth();
     const [items, setItems] = useState([]);
     const [receivedClaims, setReceivedClaims] = useState([]);
+    const [myClaims, setMyClaims] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('overview');
 
     useEffect(() => {
         fetchMyItems();
         fetchReceivedClaims();
+        fetchMyClaims();
     }, []);
 
     const fetchMyItems = async () => {
@@ -45,6 +47,21 @@ const DashboardPage = () => {
             }
         } catch (err) {
             console.error('Error fetching claims:', err);
+        }
+    };
+
+    const fetchMyClaims = async () => {
+        try {
+            if (!user?.token) return;
+            const response = await fetch('http://localhost:5000/api/claims/my-claims', {
+                headers: { 'Authorization': `Bearer ${user.token}` }
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setMyClaims(data);
+            }
+        } catch (err) {
+            console.error('Error fetching my claims:', err);
         }
     };
 
@@ -95,6 +112,8 @@ const DashboardPage = () => {
             });
             if (response.ok) {
                 setReceivedClaims(receivedClaims.map(c => c._id === claimId ? { ...c, status } : c));
+                // Refresh my claims too in case the user claimed their own item (edge case) or to sync state
+                fetchMyClaims();
             }
         } catch (err) {
             console.error('Error updating claim status:', err);
@@ -128,7 +147,7 @@ const DashboardPage = () => {
                     </div>
 
                     <div style={{ display: 'flex', gap: '2rem' }}>
-                        {['overview', 'lost', 'found', 'claims'].map(tab => (
+                        {['overview', 'lost', 'found', 'claims', 'my claims'].map(tab => (
                             <button 
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
@@ -149,12 +168,12 @@ const DashboardPage = () => {
                                     <span style={{ 
                                         marginLeft: '6px', 
                                         fontSize: '0.7rem', 
-                                        background: tab === 'claims' && receivedClaims.filter(c => c.status === 'pending').length > 0 ? 'var(--teal)' : 'rgba(139, 190, 178, 0.15)', 
-                                        color: tab === 'claims' && receivedClaims.filter(c => c.status === 'pending').length > 0 ? 'var(--deep)' : 'inherit',
+                                        background: (tab === 'claims' && receivedClaims.filter(c => c.status === 'pending').length > 0) || (tab === 'my claims' && myClaims.filter(c => c.status !== 'pending').length > 0) ? 'var(--teal)' : 'rgba(139, 190, 178, 0.15)', 
+                                        color: (tab === 'claims' && receivedClaims.filter(c => c.status === 'pending').length > 0) || (tab === 'my claims' && myClaims.filter(c => c.status !== 'pending').length > 0) ? 'var(--deep)' : 'inherit',
                                         padding: '2px 8px', 
                                         borderRadius: '10px' 
                                     }}>
-                                        {tab === 'lost' ? lostItems.length : tab === 'found' ? foundItems.length : receivedClaims.length}
+                                        {tab === 'lost' ? lostItems.length : tab === 'found' ? foundItems.length : tab === 'claims' ? receivedClaims.length : myClaims.length}
                                     </span>
                                 )}
                             </button>
@@ -273,7 +292,8 @@ const DashboardPage = () => {
                         </div>
                     </div>
                 )}
-                {/* CLAIMS TAB */}
+
+                {/* RECEIVED CLAIMS TAB */}
                 {activeTab === 'claims' && (
                     <div style={{ animation: 'fadeUp 0.4s ease both' }}>
                         <h3 style={{ fontFamily: "'Playfair Display', serif", marginBottom: '1.5rem', color: 'var(--lime)' }}>Claims on Your Reports</h3>
@@ -331,6 +351,63 @@ const DashboardPage = () => {
                                 <div style={{ textAlign: 'center', padding: '4rem', background: 'rgba(24, 49, 79, 0.2)', borderRadius: '20px', border: '1px dashed rgba(139, 190, 178, 0.2)' }}>
                                     <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>📬</div>
                                     <div style={{ color: 'rgba(139, 190, 178, 0.5)' }}>No claims received yet.</div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                {/* MY CLAIMS TAB (Claims filed by the user) */}
+                {activeTab === 'my claims' && (
+                    <div style={{ animation: 'fadeUp 0.4s ease both' }}>
+                        <h3 style={{ fontFamily: "'Playfair Display', serif", marginBottom: '1.5rem', color: 'var(--lime)' }}>Claims I've Filed</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+                            {myClaims.map(claim => (
+                                <div key={claim._id} style={{ background: 'var(--navy)', border: '1px solid rgba(139, 190, 178, 0.15)', borderRadius: '20px', padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                                    <div style={{ width: '60px', height: '60px', background: 'rgba(56, 78, 119, 0.3)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', overflow: 'hidden' }}>
+                                        {claim.item?.image ? (
+                                            <img src={`http://localhost:5000/${claim.item.image}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        ) : '📦'}
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--lime)', marginBottom: '0.3rem' }}>{claim.item?.title}</div>
+                                        <div style={{ fontSize: '0.85rem', color: 'rgba(139, 190, 178, 0.6)' }}>Filed on {new Date(claim.date).toLocaleDateString()}</div>
+                                    </div>
+                                    <div style={{ textAlign: 'right' }}>
+                                        <div style={{ 
+                                            fontSize: '0.75rem', 
+                                            padding: '0.4rem 1rem', 
+                                            borderRadius: '100px', 
+                                            textTransform: 'uppercase', 
+                                            fontWeight: 600,
+                                            background: claim.status === 'approved' ? 'rgba(139, 190, 178, 0.2)' : claim.status === 'rejected' ? 'rgba(255, 100, 100, 0.1)' : 'rgba(230, 249, 175, 0.1)',
+                                            color: claim.status === 'approved' ? 'var(--teal)' : claim.status === 'rejected' ? '#ff8888' : 'var(--lime)',
+                                            border: '1px solid currentColor'
+                                        }}>
+                                            {claim.status}
+                                        </div>
+                                        {claim.status === 'approved' && (
+                                            <div style={{ marginTop: '0.8rem', textAlign: 'right' }}>
+                                                <div style={{ fontSize: '0.7rem', color: 'var(--teal)', fontWeight: 600 }}>Claim Approved! 🤝</div>
+                                                <div style={{ fontSize: '0.78rem', color: 'var(--lime)', marginTop: '0.4rem', background: 'rgba(13, 6, 48, 0.4)', padding: '0.8rem', borderRadius: '12px', border: '1px solid rgba(139, 190, 178, 0.2)', textAlign: 'left' }}>
+                                                    <div style={{ marginBottom: '0.5rem' }}>
+                                                        <strong style={{ color: 'var(--teal)' }}>Handover Point:</strong><br />
+                                                        {claim.item?.handoverDetails || 'Check with reporter'}
+                                                    </div>
+                                                    <div>
+                                                        <strong style={{ color: 'var(--teal)' }}>Reporter Contact:</strong><br />
+                                                        {claim.item?.reportedBy?.name} ({claim.item?.reportedBy?.email})
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                            {myClaims.length === 0 && (
+                                <div style={{ textAlign: 'center', padding: '4rem', background: 'rgba(24, 49, 79, 0.2)', borderRadius: '20px', border: '1px dashed rgba(139, 190, 178, 0.2)' }}>
+                                    <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🔍</div>
+                                    <div style={{ color: 'rgba(139, 190, 178, 0.5)' }}>You haven't claimed any items yet.</div>
                                 </div>
                             )}
                         </div>
