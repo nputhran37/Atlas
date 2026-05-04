@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const { getItems, createItem } = require('../controllers/itemController');
+const { getItems, createItem, getMyItems, updateItem, deleteItem } = require('../controllers/itemController');
+const { protect } = require('../middleware/authMiddleware');
 
 // Multer setup for file uploads
 const storage = multer.diskStorage({
@@ -17,8 +18,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Routes
-// We add upload.single('image') middleware to handle the file upload
-router.post('/', upload.single('image'), createItem);
 router.get('/', getItems);
+router.post('/', protect, upload.single('image'), createItem);
+router.get('/me', protect, getMyItems);
+router.put('/:id', protect, updateItem);
+router.delete('/:id', protect, deleteItem);
 
 module.exports = router;

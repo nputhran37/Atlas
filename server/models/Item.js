@@ -14,6 +14,7 @@ const itemSchema = new mongoose.Schema({
     handoverDetails: { type: String }, // Location string
     dateLost: { type: String }, // User input date
     timeLost: { type: String }, // User input time
+    reportedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     date: { type: Date, default: Date.now }
 });
 

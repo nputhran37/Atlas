@@ -7,6 +7,7 @@ import ReportFoundPage from './pages/ReportFoundPage';
 import BrowseItemsPage from './pages/BrowseItemsPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
 import './index.css';
 import './extra.css';
 
@@ -25,6 +26,11 @@ function App() {
           <Route path="/browse" element={<BrowseItemsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          } />
           <Route path="/report-lost" element={
             <ProtectedRoute>
               <ReportItemPage />

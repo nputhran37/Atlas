@@ -26,6 +26,11 @@ exports.register = async (req, res) => {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
+                sapid: user.sapid,
+                year: user.year,
+                branch: user.branch,
+                division: user.division,
+                rollno: user.rollno,
                 token: generateToken(user._id)
             });
         }
@@ -46,6 +51,11 @@ exports.login = async (req, res) => {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
+                sapid: user.sapid,
+                year: user.year,
+                branch: user.branch,
+                division: user.division,
+                rollno: user.rollno,
                 token: generateToken(user._id)
             });
         } else {

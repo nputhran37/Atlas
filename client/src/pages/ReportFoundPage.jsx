@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { useAuth } from '../context/AuthContext';
 
 const ReportFoundPage = () => {
+    const { user } = useAuth();
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -80,8 +82,7 @@ const ReportFoundPage = () => {
         data.append('handoverPreference', formData.handoverPreference);
         data.append('handoverDetails', finalHandoverDetails);
         
-        // Append array
-        filledQuestions.forEach(q => data.append('questions[]', q));
+        data.append('questions', JSON.stringify(filledQuestions));
         
         if (image) {
             data.append('image', image);
@@ -90,6 +91,7 @@ const ReportFoundPage = () => {
         try {
             const response = await fetch('http://localhost:5000/api/items', {
                 method: 'POST',
+                headers: { 'Authorization': `Bearer ${user.token}` },
                 body: data,
             });
 

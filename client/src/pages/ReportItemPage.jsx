@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { useAuth } from '../context/AuthContext';
 
 const ReportItemPage = () => {
+    const { user } = useAuth();
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -45,6 +47,7 @@ const ReportItemPage = () => {
         try {
             const response = await fetch('http://localhost:5000/api/items', {
                 method: 'POST',
+                headers: { 'Authorization': `Bearer ${user.token}` },
                 body: data, // No Content-Type header needed, fetch sets it automatically with boundary
             });
 
