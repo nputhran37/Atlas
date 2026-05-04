@@ -8,6 +8,7 @@ import BrowseItemsPage from './pages/BrowseItemsPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
+import ItemDetailPage from './pages/ItemDetailPage';
 import './index.css';
 import './extra.css';
 
@@ -41,6 +42,7 @@ function App() {
               <ReportFoundPage />
             </ProtectedRoute>
           } />
+          <Route path="/item/:id" element={<ItemDetailPage />} />
         </Routes>
       </div>
     </Router>

@@ -7,11 +7,13 @@ import Footer from '../components/Footer';
 const DashboardPage = () => {
     const { user } = useAuth();
     const [items, setItems] = useState([]);
+    const [receivedClaims, setReceivedClaims] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('overview');
 
     useEffect(() => {
         fetchMyItems();
+        fetchReceivedClaims();
     }, []);
 
     const fetchMyItems = async () => {
@@ -28,6 +30,21 @@ const DashboardPage = () => {
             console.error('Error fetching items:', err);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchReceivedClaims = async () => {
+        try {
+            if (!user?.token) return;
+            const response = await fetch('http://localhost:5000/api/claims/received', {
+                headers: { 'Authorization': `Bearer ${user.token}` }
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setReceivedClaims(data);
+            }
+        } catch (err) {
+            console.error('Error fetching claims:', err);
         }
     };
 
@@ -66,6 +83,24 @@ const DashboardPage = () => {
         }
     };
 
+    const handleClaimStatus = async (claimId, status) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/claims/${claimId}/status`, {
+                method: 'PUT',
+                headers: { 
+                    'Authorization': `Bearer ${user.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status })
+            });
+            if (response.ok) {
+                setReceivedClaims(receivedClaims.map(c => c._id === claimId ? { ...c, status } : c));
+            }
+        } catch (err) {
+            console.error('Error updating claim status:', err);
+        }
+    };
+
     const lostItems = items.filter(i => i.type === 'lost');
     const foundItems = items.filter(i => i.type === 'found');
 
@@ -93,7 +128,7 @@ const DashboardPage = () => {
                     </div>
 
                     <div style={{ display: 'flex', gap: '2rem' }}>
-                        {['overview', 'lost', 'found'].map(tab => (
+                        {['overview', 'lost', 'found', 'claims'].map(tab => (
                             <button 
                                 key={tab}
                                 onClick={() => setActiveTab(tab)}
@@ -110,7 +145,18 @@ const DashboardPage = () => {
                                     transition: 'all 0.2s'
                                 }}
                             >
-                                {tab} {tab !== 'overview' && <span style={{ marginLeft: '6px', fontSize: '0.7rem', background: 'rgba(139, 190, 178, 0.15)', padding: '2px 8px', borderRadius: '10px' }}>{tab === 'lost' ? lostItems.length : foundItems.length}</span>}
+                                {tab} {tab !== 'overview' && (
+                                    <span style={{ 
+                                        marginLeft: '6px', 
+                                        fontSize: '0.7rem', 
+                                        background: tab === 'claims' && receivedClaims.filter(c => c.status === 'pending').length > 0 ? 'var(--teal)' : 'rgba(139, 190, 178, 0.15)', 
+                                        color: tab === 'claims' && receivedClaims.filter(c => c.status === 'pending').length > 0 ? 'var(--deep)' : 'inherit',
+                                        padding: '2px 8px', 
+                                        borderRadius: '10px' 
+                                    }}>
+                                        {tab === 'lost' ? lostItems.length : tab === 'found' ? foundItems.length : receivedClaims.length}
+                                    </span>
+                                )}
                             </button>
                         ))}
                     </div>
@@ -222,6 +268,69 @@ const DashboardPage = () => {
                                 <div style={{ textAlign: 'center', padding: '4rem', background: 'rgba(24, 49, 79, 0.2)', borderRadius: '20px', border: '1px dashed rgba(139, 190, 178, 0.2)' }}>
                                     <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>📭</div>
                                     <div style={{ color: 'rgba(139, 190, 178, 0.5)' }}>No {activeTab} reports yet.</div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+                {/* CLAIMS TAB */}
+                {activeTab === 'claims' && (
+                    <div style={{ animation: 'fadeUp 0.4s ease both' }}>
+                        <h3 style={{ fontFamily: "'Playfair Display', serif", marginBottom: '1.5rem', color: 'var(--lime)' }}>Claims on Your Reports</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                            {receivedClaims.map(claim => (
+                                <div key={claim._id} style={{ background: 'var(--navy)', border: '1px solid rgba(139, 190, 178, 0.15)', borderRadius: '20px', padding: '2rem' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+                                        <div>
+                                            <div style={{ fontSize: '0.8rem', color: 'var(--teal)', textTransform: 'uppercase', marginBottom: '0.3rem' }}>Claim for {claim.item?.title}</div>
+                                            <div style={{ fontSize: '1.2rem', fontWeight: 600, color: 'var(--lime)' }}>From: {claim.claimer?.name}</div>
+                                            <div style={{ fontSize: '0.85rem', color: 'rgba(139, 190, 178, 0.5)' }}>SAP ID: {claim.claimer?.sapid} · {claim.claimer?.email}</div>
+                                        </div>
+                                        <div style={{ 
+                                            padding: '0.4rem 1rem', 
+                                            borderRadius: '100px', 
+                                            fontSize: '0.75rem', 
+                                            background: claim.status === 'pending' ? 'rgba(230, 249, 175, 0.1)' : claim.status === 'approved' ? 'rgba(139, 190, 178, 0.2)' : 'rgba(255, 100, 100, 0.1)',
+                                            color: claim.status === 'pending' ? 'var(--lime)' : claim.status === 'approved' ? 'var(--teal)' : '#ff8888',
+                                            border: '1px solid currentColor',
+                                            textTransform: 'uppercase'
+                                        }}>
+                                            {claim.status}
+                                        </div>
+                                    </div>
+
+                                    <div style={{ background: 'rgba(13, 6, 48, 0.3)', borderRadius: '12px', padding: '1.2rem', marginBottom: '1.5rem' }}>
+                                        <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--teal)', marginBottom: '1rem' }}>Verification Answers:</div>
+                                        {claim.item?.questions.map((q, idx) => (
+                                            <div key={idx} style={{ marginBottom: '1rem' }}>
+                                                <div style={{ fontSize: '0.75rem', color: 'rgba(139, 190, 178, 0.5)', marginBottom: '0.2rem' }}>Q: {q}</div>
+                                                <div style={{ fontSize: '0.9rem', color: 'var(--lime)' }}>A: {claim.answers[idx]}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {claim.status === 'pending' && (
+                                        <div style={{ display: 'flex', gap: '1rem' }}>
+                                            <button 
+                                                onClick={() => handleClaimStatus(claim._id, 'approved')}
+                                                style={{ flex: 1, padding: '0.8rem', background: 'var(--lime)', color: 'var(--deep)', border: 'none', borderRadius: '100px', fontWeight: 600, cursor: 'pointer' }}
+                                            >
+                                                Approve Claim
+                                            </button>
+                                            <button 
+                                                onClick={() => handleClaimStatus(claim._id, 'rejected')}
+                                                style={{ flex: 1, padding: '0.8rem', background: 'transparent', color: '#ff8888', border: '1px solid #ff8888', borderRadius: '100px', fontWeight: 600, cursor: 'pointer' }}
+                                            >
+                                                Reject Claim
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                            {receivedClaims.length === 0 && (
+                                <div style={{ textAlign: 'center', padding: '4rem', background: 'rgba(24, 49, 79, 0.2)', borderRadius: '20px', border: '1px dashed rgba(139, 190, 178, 0.2)' }}>
+                                    <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>📬</div>
+                                    <div style={{ color: 'rgba(139, 190, 178, 0.5)' }}>No claims received yet.</div>
                                 </div>
                             )}
                         </div>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 const BrowseItemsPage = () => {
+    const navigate = useNavigate();
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -143,14 +145,16 @@ const BrowseItemsPage = () => {
                                             <span>⏱️ {new Date(item.date).toLocaleDateString()}</span>
                                         </div>
 
-                                        <button style={{ 
-                                            width: '100%', padding: '0.8rem', borderRadius: '10px', 
-                                            background: 'rgba(255,255,255,0.05)', color: 'var(--teal)', 
-                                            border: '1px solid rgba(139,190,178,0.3)', cursor: 'pointer',
-                                            fontWeight: '600', transition: 'background 0.2s'
-                                        }}
-                                        onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(139,190,178,0.1)'}
-                                        onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+                                        <button 
+                                            onClick={() => navigate(`/item/${item._id}`)}
+                                            style={{ 
+                                                width: '100%', padding: '0.8rem', borderRadius: '10px', 
+                                                background: 'rgba(255,255,255,0.05)', color: 'var(--teal)', 
+                                                border: '1px solid rgba(139,190,178,0.3)', cursor: 'pointer',
+                                                fontWeight: '600', transition: 'background 0.2s'
+                                            }}
+                                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(139,190,178,0.1)'}
+                                            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
                                         >
                                             View Details
                                         </button>
