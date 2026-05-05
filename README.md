@@ -1,4 +1,4 @@
-# Atlas - Lost and Found Management System
+# Atlas - Archived Tracking of Lost and Searched Articles
 
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
