@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
@@ -9,14 +9,14 @@ const Navbar = () => {
         <nav className="navbar">
             <Link to="/" className="logo">Atlas</Link>
             <ul>
-                <li><Link to="/">Home</Link></li>
-                <li><Link to="/browse">Browse Items</Link></li>
-                <li><Link to="/report-lost">Report Lost</Link></li>
-                <li><Link to="/report-found">Report Found</Link></li>
+                <li><NavLink to="/" className={({ isActive }) => isActive ? "active-link" : ""}>Home</NavLink></li>
+                <li><NavLink to="/browse" className={({ isActive }) => isActive ? "active-link" : ""}>Browse Items</NavLink></li>
+                <li><NavLink to="/report-lost" className={({ isActive }) => isActive ? "active-link" : ""}>Report Lost</NavLink></li>
+                <li><NavLink to="/report-found" className={({ isActive }) => isActive ? "active-link" : ""}>Report Found</NavLink></li>
                 {user ? (
                     <>
                         <li style={{ color: 'var(--lime)', fontWeight: '600', marginLeft: '1rem' }}>Hi, {user.name.split(' ')[0]}</li>
-                        <li><Link to="/dashboard">Dashboard</Link></li>
+                        <li><NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""}>Dashboard</NavLink></li>
                         <li><button onClick={logout} className="nav-cta nav-logout">Logout</button></li>
                     </>
                 ) : (

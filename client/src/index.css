@@ -74,6 +74,12 @@
             color: var(--lime);
         }
 
+        .active-link {
+            color: #E6F9AF !important;
+            text-decoration: underline !important;
+            font-family: 'Playfair Display', serif !important;
+        }
+
         .nav-cta {
             background: var(--lime);
             color: var(--deep);
