@@ -290,13 +290,21 @@
         .hero-float {
             position: absolute;
             right: 3rem;
-            top: 50%;
+            top: 45%;
             transform: translateY(-50%);
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1.2rem;
-            animation: fadeUp 0.9s 0.4s ease both;
             z-index: 2;
+        }
+
+        @keyframes continuousFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-12px);
+            }
         }
 
         .float-card {
@@ -310,20 +318,33 @@
             align-items: center;
             gap: 0.6rem;
             backdrop-filter: blur(8px);
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
             cursor: default;
+            animation: continuousFloat 4s ease-in-out infinite;
         }
 
         .float-card:hover {
-            transform: translateY(-4px) scale(1.03);
+            animation-play-state: paused;
+            transform: translateY(-8px) scale(1.05) !important;
+            box-shadow: 0 10px 25px rgba(13, 6, 48, 0.5);
+        }
+
+        .float-card:nth-child(1) {
+            animation-delay: 0s;
         }
 
         .float-card:nth-child(2) {
             margin-top: 2rem;
+            animation-delay: 1s;
+        }
+
+        .float-card:nth-child(3) {
+            animation-delay: 2s;
         }
 
         .float-card:nth-child(4) {
             margin-top: 2rem;
+            animation-delay: 3s;
         }
 
         .float-icon {
