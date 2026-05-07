@@ -96,15 +96,19 @@
         }
 
         .nav-logout {
-            background: rgba(255, 100, 100, 0.1);
-            color: #ff8888;
-            border: 1px solid #ff8888;
+            background: transparent;
+            color: var(--teal);
+            border: 1px solid var(--teal);
+            font-family: inherit;
+            font-size: 0.85rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
             cursor: pointer;
         }
 
         .nav-logout:hover {
-            background: #ff8888;
-            color: var(--deep);
+            background: var(--teal) !important;
+            color: var(--deep) !important;
         }
 
         /* ── HERO ── */
